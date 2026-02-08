@@ -5,10 +5,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          buildozer_version: master
-          command: buildozer android debug
+          python-version: '3.11'
+
+      - name: Install Buildozer
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Build with Buildozer
+        run: |
+          # Instalamos dependencias del sistema necesarias
+          sudo apt-get update
+          sudo apt-get install -y libsqlite3-dev manual-output-binaries
+          # Ejecutamos la compilación
+          buildozer android debug
           
